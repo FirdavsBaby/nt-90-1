@@ -50,6 +50,12 @@ const server = async (req, res) => {
       req.body = await bodyParser(req);
       const { complete, id } = req.body;
       const findTodo = todos.find((t) => t.id === id);
+      if (complete !== "success" && complete !== "failed")
+        return res.writeHead(400).end(
+          JSON.stringify({
+            message: "You can complete message with success or failed!",
+          })
+        );
       if (!findTodo)
         return res
           .writeHead(404)
@@ -80,8 +86,8 @@ const server = async (req, res) => {
       req.body = await bodyParser(req);
       const { id } = req.body;
       const newTodos = todos.filter((t) => t.id !== id);
-        Todos.write(newTodos);
-      res.writeHead(200).end(JSON.stringify({message: "Todo deleted"}));
+      Todos.write(newTodos);
+      res.writeHead(200).end(JSON.stringify({ message: "Todo deleted" }));
     } catch (error) {
       res.writeHead(500).end(JSON.stringify(error));
     }
